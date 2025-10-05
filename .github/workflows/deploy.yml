@@ -1,0 +1,35 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Get the code
+        uses: actions/checkout@v3
+      
+      - name: ✅ Check if website exists
+        run: |
+          if [ -f "index.html" ]; then
+            echo "✅ Website file found!"
+          else
+            echo "❌ Website file missing!"
+            exit 1
+          fi
+      
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          cname: false
+
